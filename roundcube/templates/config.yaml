@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "roundcube.fullname" . }}
+  labels:
+    {{- include "roundcube.labels" . | nindent 4 }}
+data:
+  ROUNDCUBEMAIL_DEFAULT_HOST: {{ required "imapHost or host is required, e.g. tls://mail.mydomain.com" (coalesce .Values.host .Values.imapHost) | quote }}
+  ROUNDCUBEMAIL_DEFAULT_PORT: {{ .Values.imapPort | quote }}
+  ROUNDCUBEMAIL_SMTP_SERVER: {{ required "smtpHost or host  is required, e.g. tls://mail.mydomain.com"  (coalesce .Values.host .Values.smtpHost) | quote }}
+  ROUNDCUBEMAIL_SMTP_PORT: {{ .Values.smtpPort | quote }}
+  ROUNDCUBEMAIL_UPLOAD_MAX_FILESIZE: {{ .Values.uploadMaxSize | quote }}
+  ROUNDCUBEMAIL_SKIN: {{ .Values.skin | quote }}
