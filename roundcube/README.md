@@ -47,7 +47,9 @@ This example shows values for an installation with
 persistence:
   enabled: true
   
-# If you're using 
+# If you're using a hostPath storage class make sure to pin the pod to a specific node.
+# Alternatively, create a PV and PVC first, use a nodeSelector on the PV and
+# provide the PVC name as persistence.existingClaim. 
 nodeSelector:
   kubernetes.io/hostname: my-node
 
