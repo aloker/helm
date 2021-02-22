@@ -30,7 +30,7 @@ helm install
     --namespace=roundcube \
     --atomic \
     roundcube \
-    ./helm/roundcube
+    aloker/roundcube
 ```
 
 ## Example custom values
