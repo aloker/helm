@@ -50,6 +50,9 @@ spec:
           volumeMounts:
               - name: data
                 mountPath: /var/roundcube/db
+                {{- if .Values.persistence.subPath }}
+                subPath: {{ .Values.persistence.subPath}}
+                {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "roundcube.fullname" . }}

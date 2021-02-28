@@ -1,21 +1,30 @@
-{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) -}}
+{{- $p :=  .Values.persistence -}}
+{{- if and $p.enabled (not $p.existingClaim) -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ template "roundcube.fullname" . }}
+  {{- if or $p.claimsAnnotation $p.keep }}
   annotations:
-  {{- with .Values.persistence.annotations  }}
+  {{- if $p.keep }}
+    "helm.sh/resource-policy": keep
+  {{- end}}
+  {{- with $p.claimAnnotations  }}
   {{ toYaml . | indent 4 }}
+  {{- end }}
   {{- end }}
   labels:
     {{- include "roundcube.labels" . | nindent 4 }}
 spec:
+  {{- if $p.volumeName }}
+  volumeName: {{ $p.volumeName}}
+  {{- end}}
   accessModes:
-    - {{ .Values.persistence.accessMode | quote }}
+    - {{ $p.accessMode | quote }}
   resources:
     requests:
-      storage: {{ .Values.persistence.size | quote }}
-  {{- if .Values.persistence.storageClass }}
-  storageClassName: {{ .Values.persistence.storageClass | quote }}
+      storage: {{ $p.size | quote }}
+  {{- if $p.storageClass }}
+  storageClassName: {{ $p.storageClass | quote }}
   {{- end }}
-{{- end -}}
+{{- end }}
